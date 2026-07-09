@@ -246,7 +246,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi300062sn3aywe8i7f" data-title="实验八报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/" data-id="cmrdctmml0007w4n38uoy2yt8" data-title="实验八报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -280,11 +280,150 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <h1 id="实验七-远程登录管理-——-实验报告"><a href="#实验七-远程登录管理-——-实验报告" class="headerlink" title="实验七 远程登录管理 —— 实验报告"></a>实验七 远程登录管理 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>安装并配置 OpenSSH 服务，实现多台主机之间的远程登录管理；配置 SSH 密钥认证实现免密登录；并掌握使用 SCP 与 rsync 进行跨机文件传输与同步的方法。</p>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li><strong>操作系统</strong>：Ubuntu 26.04 LTS，Linux 7.0.0-27-generic，x86_64</li>
+<li><strong>主机</strong>：node1（<code>192.168.56.101</code>）、node2（<code>192.168.56.102</code>），用户名均为 <code>my</code></li>
+<li><strong>网络</strong>：两台虚拟机处于同一 Host-Only 网络（<code>192.168.56.0/24</code>）</li>
+<li><strong>主要软件</strong>：OpenSSH Server、SCP、rsync</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><h3 id="步骤一：检查-SSH-服务状态"><a href="#步骤一：检查-SSH-服务状态" class="headerlink" title="步骤一：检查 SSH 服务状态"></a>步骤一：检查 SSH 服务状态</h3><p>在 node2 上执行 <code>systemctl status ssh</code>，可见 <code>ssh.service</code> 处于 <code>active (running)</code> 状态，并已 <code>enabled</code> 开机自启，服务正在 <code>0.0.0.0:22</code> 与 <code>:::22</code> 端口监听。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%83/%E6%AD%A5%E9%AA%A4%E4%B8%80.png" alt="检查SSH服务状态"><br><em>图1：ssh.service 处于 active(running) 状态并监听 22 端口</em></p>
+<h3 id="步骤二：配置-SSH-服务器"><a href="#步骤二：配置-SSH-服务器" class="headerlink" title="步骤二：配置 SSH 服务器"></a>步骤二：配置 SSH 服务器</h3><p>用 <code>sudo nano /etc/ssh/sshd_config</code> 编辑配置文件，设置 <code>PermitRootLogin no</code>、<code>PubkeyAuthentication yes</code> 等关键项，保存后执行 <code>sudo systemctl restart ssh</code> 重启服务使配置生效。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%83/%E6%AD%A5%E9%AA%A4%E4%BA%8C.png" alt="配置SSH服务器"><br><em>图2：编辑 sshd_config 并重启 SSH 服务</em></p>
+<h3 id="步骤三：生成-SSH-密钥对"><a href="#步骤三：生成-SSH-密钥对" class="headerlink" title="步骤三：生成 SSH 密钥对"></a>步骤三：生成 SSH 密钥对</h3><p>执行 <code>ssh-keygen -t ed25519 -C &quot;node1&quot;</code> 生成 ed25519 密钥对，密钥保存到 <code>~/.ssh/</code> 目录。<code>ls ~/.ssh</code> 可见私钥 <code>id_ed25519</code> 与公钥 <code>id_ed25519.pub</code>。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%83/%E6%AD%A5%E9%AA%A4%E4%B8%89.png" alt="生成密钥对"><br><em>图3：生成 ed25519 密钥对及其 randomart 指纹</em></p>
+<h3 id="步骤四：将公钥复制到远程服务器"><a href="#步骤四：将公钥复制到远程服务器" class="headerlink" title="步骤四：将公钥复制到远程服务器"></a>步骤四：将公钥复制到远程服务器</h3><p>执行 <code>ssh-copy-id my@192.168.56.102</code>，首次连接确认主机指纹后输入一次密码，提示 <code>Number of key(s) added: 1</code>，公钥被写入远程主机的 <code>authorized_keys</code>。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%83/%E6%AD%A5%E9%AA%A4%E5%9B%9B.png" alt="复制公钥"><br><em>图4：ssh-copy-id 成功安装公钥到远程主机</em></p>
+<h3 id="步骤五：测试免密登录"><a href="#步骤五：测试免密登录" class="headerlink" title="步骤五：测试免密登录"></a>步骤五：测试免密登录</h3><p>执行 <code>ssh my@192.168.56.102</code>，无需输入密码即直接登录到远程主机，显示 Ubuntu 欢迎信息，说明密钥认证配置成功。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%83/%E6%AD%A5%E9%AA%A4%E4%BA%94.png" alt="免密登录"><br><em>图5：免密登录远程主机成功</em></p>
+<h3 id="步骤六：使用-SCP-传输文件"><a href="#步骤六：使用-SCP-传输文件" class="headerlink" title="步骤六：使用 SCP 传输文件"></a>步骤六：使用 SCP 传输文件</h3><p>在 node1 上执行 <code>scp ~/test.txt my@192.168.56.102:/home/my/</code> 将文件上传到 node2；登录 node2 后 <code>ls</code> 可见 <code>test.txt</code>，<code>cat test.txt</code> 输出 <code>Hello Node2</code>，确认文件传输成功。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%83/%E6%AD%A5%E9%AA%A4%E5%85%AD.png" alt="SCP传输文件"><br><em>图6：SCP 上传 test.txt 并在远程主机验证内容</em></p>
+<h3 id="步骤七：使用-rsync-同步文件"><a href="#步骤七：使用-rsync-同步文件" class="headerlink" title="步骤七：使用 rsync 同步文件"></a>步骤七：使用 rsync 同步文件</h3><p>在 node1 上创建 <code>~/project/test.txt</code>，执行 <code>rsync -avz -e ssh ~/project/ my@node2:/home/my/project/</code> 将目录同步到 node2。输出显示 <code>sending incremental file list</code> 并成功传输 <code>test.txt</code>，实现了增量同步。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%83/%E6%AD%A5%E9%AA%A4%E4%B8%83.png" alt="rsync同步文件"><br><em>图7：rsync 增量同步 project 目录到远程主机</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><table>
+<thead>
+<tr>
+<th align="left">测试项</th>
+<th align="left">命令 &#x2F; 操作</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SSH 服务状态</td>
+<td align="left"><code>systemctl status ssh</code>（active&#x2F;running）</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">服务配置</td>
+<td align="left">编辑 <code>sshd_config</code> + <code>systemctl restart ssh</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">生成密钥对</td>
+<td align="left"><code>ssh-keygen -t ed25519</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">分发公钥</td>
+<td align="left"><code>ssh-copy-id</code>(key added: 1)</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">免密登录</td>
+<td align="left"><code>ssh my@192.168.56.102</code> 无需密码</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">SCP 传输</td>
+<td align="left"><code>scp</code> 上传，远程 <code>cat</code> 验证 <code>Hello Node2</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">rsync 同步</td>
+<td align="left"><code>rsync -avz -e ssh</code> 增量同步</td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>1. SSH 认证方式对比</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">认证方式</th>
+<th align="left">原理</th>
+<th align="left">安全性</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">密码认证</td>
+<td align="left">每次登录输入密码</td>
+<td align="left">较低</td>
+<td align="left">临时访问</td>
+</tr>
+<tr>
+<td align="left">密钥认证</td>
+<td align="left">公钥&#x2F;私钥对验证</td>
+<td align="left">高</td>
+<td align="left">日常管理、自动化</td>
+</tr>
+</tbody></table>
+<p><strong>2. 常用命令</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>systemctl status/restart ssh</code></td>
+<td align="left">查看 &#x2F; 重启 SSH 服务</td>
+</tr>
+<tr>
+<td align="left"><code>ssh-keygen -t ed25519</code></td>
+<td align="left">生成密钥对</td>
+</tr>
+<tr>
+<td align="left"><code>ssh-copy-id 用户@主机</code></td>
+<td align="left">分发公钥实现免密</td>
+</tr>
+<tr>
+<td align="left"><code>scp [-r] 源 目标</code></td>
+<td align="left">基于 SSH 复制文件&#x2F;目录</td>
+</tr>
+<tr>
+<td align="left"><code>rsync -avz -e ssh 源 目标</code></td>
+<td align="left">增量同步目录</td>
+</tr>
+</tbody></table>
+<p><strong>3. SCP 与 rsync 对比</strong>：SCP 一次性整体复制，适合少量文件；rsync 只传输变化部分（增量同步），并可用 <code>--delete</code>、<code>--exclude</code> 等参数，适合目录同步与定期备份。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题现象</th>
+<th align="left">原因</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Permission denied</code></td>
+<td align="left">密码错误或密钥未配置</td>
+<td align="left">核对用户名密码，或用 <code>ssh-copy-id</code> 分发公钥</td>
+</tr>
+<tr>
+<td align="left">配置免密后仍提示输入密码</td>
+<td align="left"><code>authorized_keys</code> 权限不对</td>
+<td align="left"><code>chmod 600 ~/.ssh/authorized_keys</code></td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>通过本次实验，我掌握了 SSH 远程登录与文件传输的完整流程，理解了密码认证与密钥认证的区别：密钥认证以公钥&#x2F;私钥对替代明文密码，既免去了重复输入密码的麻烦，又显著提升了安全性，是多机管理和自动化运维的基础。SCP 与 rsync 则让跨机文件操作变得高效，rsync 的增量同步在实际备份场景中尤为实用。</p>
+<p>在思政层面，OpenSSH 作为开源加密通信的代表，为全球服务器管理提供了免费而可靠的安全基础设施，体现了开源社区对信息安全的贡献。作为未来的软件工程师，熟练掌握安全的远程运维手段，既是基本功，也是对数据安全负责任的体现。</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi100022sn3ekc4c8yt" data-title="实验七报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/" data-id="cmrdctmmh0001w4n35vsd1gku" data-title="实验七报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -485,7 +624,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi400072sn3fabe2wso" data-title="实验六报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/" data-id="cmrdctmml0008w4n31agxfjer" data-title="实验六报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -680,7 +819,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi200052sn3hgcv4uwo" data-title="实验五报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/" data-id="cmrdctmmk0005w4n378h4g0jq" data-title="实验五报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -875,7 +1014,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi400082sn3dmr0a11s" data-title="实验四报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" data-id="cmrdctmml0006w4n33kej0vxv" data-title="实验四报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1073,7 +1212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi200042sn39901hw88" data-title="实验三报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" data-id="cmrdctmmi0002w4n36lxq1nob" data-title="实验三报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1187,7 +1326,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi000012sn38s6nd4nk" data-title="实验二报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" data-id="cmrdctmmj0004w4n3706t6vn9" data-title="实验二报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1265,7 +1404,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/08/%E5%8E%9F%E7%A5%9E/" data-id="cmrdc3zhy00002sn39dmu1f7t" data-title="原神" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/08/%E5%8E%9F%E7%A5%9E/" data-id="cmrdctmmj0003w4n30ydv8gae" data-title="原神" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1316,7 +1455,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/07/hello-world/" data-id="cmrdc3zi100032sn349f93t6w" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/07/hello-world/" data-id="cmrdctmmf0000w4n3dc7v74lz" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
