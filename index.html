@@ -246,7 +246,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/" data-id="cmrd4qz2v0006u4n3ezxl1o2w" data-title="实验八报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi300062sn3aywe8i7f" data-title="实验八报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -284,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/" data-id="cmrd4qz2t0003u4n331h27s8u" data-title="实验七报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi100022sn3ekc4c8yt" data-title="实验七报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -485,7 +485,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/" data-id="cmrd4qz2v0007u4n36y9fenxt" data-title="实验六报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi400072sn3fabe2wso" data-title="实验六报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -519,11 +519,168 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <h1 id="实验五-虚拟机安装与使用-——-实验报告"><a href="#实验五-虚拟机安装与使用-——-实验报告" class="headerlink" title="实验五 虚拟机安装与使用 —— 实验报告"></a>实验五 虚拟机安装与使用 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>使用虚拟机工具 VirtualBox 安装 Linux 系统（Ubuntu），通过克隆技术构建一个多机虚拟化环境，并掌握基于虚拟机的开发环境的基本构建与网络配置方法（双网卡、静态 IP、主机名解析、多机互通）。</p>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li><strong>操作系统（宿主机）</strong>：Windows 11 家庭中文版（内部版本号 10.0.26100）</li>
+<li><strong>虚拟化软件</strong>：Oracle VirtualBox 7.2.12</li>
+<li><strong>客户机系统</strong>：Ubuntu 26.04（64 位）</li>
+<li><strong>虚拟机配置</strong>：内存 2048 MB，处理器 2 核，硬盘 20 GB（VDI，动态分配）</li>
+<li><strong>网络方案</strong>：双网卡（NAT + 仅主机 Host-Only）</li>
+<li><strong>网络拓扑</strong>：Host-Only 网段 <code>192.168.56.0/24</code>，node1 &#x3D; <code>192.168.56.101</code>，node2 &#x3D; <code>192.168.56.102</code></li>
+<li><strong>网络</strong>：需要互联网连接</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><h3 id="步骤一：下载与安装-VirtualBox"><a href="#步骤一：下载与安装-VirtualBox" class="headerlink" title="步骤一：下载与安装 VirtualBox"></a>步骤一：下载与安装 VirtualBox</h3><p>访问 VirtualBox 官网 <a target="_blank" rel="noopener" href="https://www.virtualbox.org/">https://www.virtualbox.org/</a> 下载 Windows 版本安装包，双击启动安装向导并按默认选项完成安装，安装结束后重启电脑。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E4%B8%80.png" alt="VirtualBox 安装向导"><br><em>图1：Oracle VirtualBox 7.2.12 安装向导欢迎界面</em></p>
+<h3 id="步骤二：下载-Ubuntu-ISO-镜像"><a href="#步骤二：下载-Ubuntu-ISO-镜像" class="headerlink" title="步骤二：下载 Ubuntu ISO 镜像"></a>步骤二：下载 Ubuntu ISO 镜像</h3><p>访问 Ubuntu 官网 <a target="_blank" rel="noopener" href="https://ubuntu.com/download">https://ubuntu.com/download</a> 下载 Ubuntu 镜像（<code>ubuntu-26.04-desktop-amd64.iso</code>），供创建虚拟机时挂载使用。</p>
+<h3 id="步骤三：创建虚拟机（模板机）"><a href="#步骤三：创建虚拟机（模板机）" class="headerlink" title="步骤三：创建虚拟机（模板机）"></a>步骤三：创建虚拟机（模板机）</h3><p>在 VirtualBox 中新建虚拟机，类型选 Linux &#x2F; Ubuntu (64-bit)，挂载下载好的 ISO 映像，分配内存 2048 MB、硬盘 20 GB（VDI 动态分配），并配置双网卡：适配器 1 为 NAT（负责上网），适配器 2 为仅主机（Host-Only，负责多机互联）。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E4%B8%89.png" alt="虚拟机明细"><br><em>图2：虚拟机 ubuntu-node1 的配置明细（内存 2048MB、处理器 2、硬盘 20GB、网卡 1 为 NAT）</em></p>
+<h3 id="步骤四：安装-Ubuntu"><a href="#步骤四：安装-Ubuntu" class="headerlink" title="步骤四：安装 Ubuntu"></a>步骤四：安装 Ubuntu</h3><p>启动虚拟机进入 Ubuntu 安装向导，选择语言与键盘布局，网络保持默认 DHCP，存储选择使用整块磁盘，设置用户名和密码后等待系统复制文件完成安装并重启。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E5%9B%9B.png" alt="安装 Ubuntu"><br><em>图3：Ubuntu 26.04 安装过程中，正在复制系统文件</em></p>
+<h3 id="步骤五：配置静态-IP-地址"><a href="#步骤五：配置静态-IP-地址" class="headerlink" title="步骤五：配置静态 IP 地址"></a>步骤五：配置静态 IP 地址</h3><p>登录系统后编辑 Netplan 配置文件，将 NAT 网卡（<code>ens33</code>）保持 DHCP，仅主机网卡（<code>ens34</code>）设为静态地址 <code>192.168.56.101/24</code>，再执行 <code>sudo netplan apply</code> 应用配置。通过 <code>ip addr</code> 可见两块网卡均已获得预期地址。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/netplan/50-cloud-init.yaml</span><br><span class="line"><span class="built_in">sudo</span> netplan apply</span><br><span class="line">ip addr</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E4%BA%94.png" alt="配置静态IP"><br><em>图4：应用 Netplan 后，ens33 为 NAT 网卡（192.168.8.136），ens34 为仅主机网卡（192.168.56.101）</em></p>
+<h3 id="步骤六：配置主机名与-hosts-解析"><a href="#步骤六：配置主机名与-hosts-解析" class="headerlink" title="步骤六：配置主机名与 hosts 解析"></a>步骤六：配置主机名与 hosts 解析</h3><p>编辑 <code>/etc/hosts</code>，添加各节点的 IP 与主机名映射，使虚拟机之间可通过主机名互相访问。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E5%85%AD.png" alt="配置hosts"><br><em>图5：在 &#x2F;etc&#x2F;hosts 中添加 192.168.56.101 node1、192.168.56.102 node2 的映射</em></p>
+<h3 id="步骤七：克隆虚拟机"><a href="#步骤七：克隆虚拟机" class="headerlink" title="步骤七：克隆虚拟机"></a>步骤七：克隆虚拟机</h3><p>关闭模板机后，在 VirtualBox 中右键该虚拟机选择「克隆」，采用完全克隆方式克隆出 <code>Ubuntu-node2</code>（并重新生成网卡 MAC 地址）。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E4%B8%83.png" alt="克隆虚拟机"><br><em>图6：克隆虚拟机向导，新虚拟机命名为 Ubuntu-node2</em></p>
+<h3 id="步骤八：修改克隆机的主机名和-IP"><a href="#步骤八：修改克隆机的主机名和-IP" class="headerlink" title="步骤八：修改克隆机的主机名和 IP"></a>步骤八：修改克隆机的主机名和 IP</h3><p>在克隆机上将主机名改为 <code>node2</code>，并把 Netplan 中的静态 IP 修改为 <code>192.168.56.102</code> 后应用。应用时提示配置文件权限过于开放，执行 <code>sudo chmod 600</code> 收紧权限后重新应用即可消除警告。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> hostnamectl set-hostname node2</span><br><span class="line"><span class="built_in">sudo</span> nano /etc/netplan/50-cloud-init.yaml</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> 600 /etc/netplan/50-cloud-init.yaml</span><br><span class="line"><span class="built_in">sudo</span> netplan apply</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E5%85%AB.png" alt="修改克隆机配置"><br><em>图7：node2 修改 IP 后应用配置，并用 chmod 600 消除权限过开警告</em></p>
+<h3 id="步骤九：验证多机环境"><a href="#步骤九：验证多机环境" class="headerlink" title="步骤九：验证多机环境"></a>步骤九：验证多机环境</h3><p>在 node1 上分别 ping 外网、node2 的私网地址与主机名，在 node2 上 ping node1，均连通且丢包率为 0%，说明双网卡与多机互通环境搭建成功。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ping -c 3 8.8.8.8         <span class="comment"># 外网</span></span><br><span class="line">ping -c 3 192.168.56.102  <span class="comment"># node2 的 IP</span></span><br><span class="line">ping -c 3 node2           <span class="comment"># 主机名解析</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E4%B9%9D-1.png" alt="node1 验证"><br><em>图8：node1 上 ping 外网 8.8.8.8、192.168.56.102、node2 均成功，0% 丢包</em></p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%94/%E6%AD%A5%E9%AA%A4%E4%B9%9D-2.png" alt="node2 验证"><br><em>图9：node2 上 ping node1（192.168.56.101）成功，0% 丢包</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><p>各项验证结果汇总如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">测试项</th>
+<th align="left">源</th>
+<th align="left">目标</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">外网连通性</td>
+<td align="left">node1</td>
+<td align="left">8.8.8.8</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">多机 IP 连通性</td>
+<td align="left">node1</td>
+<td align="left">node2（192.168.56.102）</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">主机名解析连通性</td>
+<td align="left">node1</td>
+<td align="left">node2</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">反向连通性</td>
+<td align="left">node2</td>
+<td align="left">node1（192.168.56.101）</td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<p>最终成果：成功安装 VirtualBox 并部署 Ubuntu 虚拟机，通过完全克隆构建出 node1、node2 两台虚拟机，配置双网卡与静态 IP 后实现了「虚拟机既能上网、又能内网互通」的多机虚拟化环境。</p>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>1. 虚拟机网络三种模式</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">网络模式</th>
+<th align="left">特点</th>
+<th align="left">本实验用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">NAT</td>
+<td align="left">虚拟机借宿主机上网，外部不可直达</td>
+<td align="left">上网、下载软件</td>
+</tr>
+<tr>
+<td align="left">桥接（Bridged）</td>
+<td align="left">虚拟机直接接入宿主机所在局域网</td>
+<td align="left">本实验未使用</td>
+</tr>
+<tr>
+<td align="left">仅主机（Host-Only）</td>
+<td align="left">宿主机与虚拟机形成隔离私网</td>
+<td align="left">多机内网互通</td>
+</tr>
+</tbody></table>
+<p><strong>2. 关键命令</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>sudo nano /etc/netplan/*.yaml</code></td>
+<td align="left">编辑网络（IP）配置</td>
+</tr>
+<tr>
+<td align="left"><code>sudo netplan apply</code></td>
+<td align="left">应用 Netplan 网络配置</td>
+</tr>
+<tr>
+<td align="left"><code>ip addr</code></td>
+<td align="left">查看网卡与 IP 地址</td>
+</tr>
+<tr>
+<td align="left"><code>sudo hostnamectl set-hostname</code></td>
+<td align="left">修改主机名</td>
+</tr>
+<tr>
+<td align="left"><code>sudo chmod 600 *.yaml</code></td>
+<td align="left">收紧配置文件权限</td>
+</tr>
+<tr>
+<td align="left"><code>ping -c 3 &lt;目标&gt;</code></td>
+<td align="left">测试网络连通性</td>
+</tr>
+</tbody></table>
+<p><strong>3. 双网卡方案要点</strong>：NAT 网卡（<code>ens33</code>）保持 DHCP 用于访问外网，仅主机网卡（<code>ens34</code>）配置同网段静态 IP 用于多机互联；<code>/etc/hosts</code> 提供主机名到 IP 的本地解析，克隆时应重新生成 MAC 地址以避免网卡冲突。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题现象</th>
+<th align="left">原因分析</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">netplan apply 提示配置文件权限过开</td>
+<td align="left">Netplan 配置文件权限过大</td>
+<td align="left">执行 <code>sudo chmod 600 /etc/netplan/*.yaml</code> 后重试</td>
+</tr>
+<tr>
+<td align="left">克隆机网络异常</td>
+<td align="left">克隆保留了原网卡 MAC 地址</td>
+<td align="left">克隆时勾选重新生成 MAC 地址</td>
+</tr>
+<tr>
+<td align="left">虚拟机之间 ping 不通</td>
+<td align="left">Host-Only 网卡 IP 不在同一网段</td>
+<td align="left">检查各机 IP 是否均在 <code>192.168.56.0/24</code> 网段</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>通过本次实验，我完成了从零搭建多机虚拟化环境的完整流程。在<strong>技术层面</strong>，我理解了虚拟机双网卡的分工思路：NAT 负责对外上网、仅主机负责内网互通，二者互不干扰；也体会到 Netplan 静态 IP 配置、<code>/etc/hosts</code> 主机名解析以及克隆技术的作用——克隆让「配好一台、复制多台」成为可能，是构建集群实验环境的高效手段。</p>
+<p>在<strong>思政层面</strong>，VirtualBox 与 Ubuntu 都是自由&#x2F;开源软件，让我在个人电脑上零成本模拟出多台服务器组成的实验环境，这正是开源生态带来的普惠价值。同时我也意识到，虚拟化与云计算的底层技术长期由国外主导，作为未来的软件工程师，应在善用开源工具的同时，关注并支持国产虚拟化与自主可控技术的发展。</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/" data-id="cmrd4qz2u0005u4n3e8yl43c7" data-title="实验五报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi200052sn3hgcv4uwo" data-title="实验五报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -718,7 +875,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" data-id="cmrd4qz2v0008u4n3g0p1fvhk" data-title="实验四报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi400082sn3dmr0a11s" data-title="实验四报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -916,7 +1073,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" data-id="cmrd4qz2t0002u4n3fuz7ab5l" data-title="实验三报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi200042sn39901hw88" data-title="实验三报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1030,7 +1187,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" data-id="cmrd4qz2u0004u4n3grxo2scb" data-title="实验二报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" data-id="cmrdc3zi000012sn38s6nd4nk" data-title="实验二报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1108,7 +1265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/08/%E5%8E%9F%E7%A5%9E/" data-id="cmrd4qz2s0001u4n36r46ek7z" data-title="原神" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/08/%E5%8E%9F%E7%A5%9E/" data-id="cmrdc3zhy00002sn39dmu1f7t" data-title="原神" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1159,7 +1316,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/07/hello-world/" data-id="cmrd4qz2q0000u4n3en754zrz" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/07/hello-world/" data-id="cmrdc3zi100032sn349f93t6w" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
