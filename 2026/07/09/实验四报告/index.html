@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>实验四报告 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="实验四 Web 站点构建 —— 实验报告一、实验目的本次实验旨在将实验二中已在本地搭建好的 Hexo 静态博客部署到 GitHub Pages，使其正式上线并可被公网访问，从而掌握静态站点“本地生成 → 远程部署 → 免费上线”的完整流程，理解静态站点生成器（SSG）的部署原理及其与动态站点的区别。  说明：实验四的步骤一至步骤六（环境准备、安装 Hexo、初始化项目、本地预览、编写文章、更换主题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实验四报告">
+<meta property="og:url" content="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="实验四 Web 站点构建 —— 实验报告一、实验目的本次实验旨在将实验二中已在本地搭建好的 Hexo 静态博客部署到 GitHub Pages，使其正式上线并可被公网访问，从而掌握静态站点“本地生成 → 远程部署 → 免费上线”的完整流程，理解静态站点生成器（SSG）的部署原理及其与动态站点的区别。  说明：实验四的步骤一至步骤六（环境准备、安装 Hexo、初始化项目、本地预览、编写文章、更换主题">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E6%8F%92%E4%BB%B6%E9%83%A8%E7%BD%B2.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E9%83%A8%E7%BD%B2github.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE.png">
+<meta property="article:published_time" content="2026-07-09T05:56:06.000Z">
+<meta property="article:modified_time" content="2026-07-09T06:06:36.954Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E6%8F%92%E4%BB%B6%E9%83%A8%E7%BD%B2.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-实验四报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:06.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      实验四报告
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="实验四-Web-站点构建-——-实验报告"><a href="#实验四-Web-站点构建-——-实验报告" class="headerlink" title="实验四 Web 站点构建 —— 实验报告"></a>实验四 Web 站点构建 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>本次实验旨在将实验二中已在本地搭建好的 Hexo 静态博客部署到 GitHub Pages，使其正式上线并可被公网访问，从而掌握静态站点“本地生成 → 远程部署 → 免费上线”的完整流程，理解静态站点生成器（SSG）的部署原理及其与动态站点的区别。</p>
+<blockquote>
+<p><strong>说明</strong>：实验四的步骤一至步骤六（环境准备、安装 Hexo、初始化项目、本地预览、编写文章、更换主题）已在<strong>实验二</strong>中完成，故本报告从<strong>步骤七：部署到 GitHub Pages</strong> 开始记录。</p>
+</blockquote>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li><strong>操作系统</strong>：Windows 11 家庭中文版（内部版本号 10.0.26100）</li>
+<li><strong>构建工具</strong>：hexo-cli 4.3.2，Hexo 7.3.0</li>
+<li><strong>博客主题</strong>：landscape（Hexo 默认主题）</li>
+<li><strong>部署插件</strong>：hexo-deployer-git</li>
+<li><strong>版本控制</strong>：Git 2.53.0.windows.2</li>
+<li><strong>代码托管 &#x2F; 部署平台</strong>：GitHub Pages（仓库 <code>wuziwei23.github.io</code>）</li>
+<li><strong>终端</strong>：Windows PowerShell</li>
+<li><strong>网络</strong>：可访问互联网</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><h3 id="步骤七：部署到-GitHub-Pages（免费上线）"><a href="#步骤七：部署到-GitHub-Pages（免费上线）" class="headerlink" title="步骤七：部署到 GitHub Pages（免费上线）"></a>步骤七：部署到 GitHub Pages（免费上线）</h3><h4 id="7-1-创建-GitHub-仓库"><a href="#7-1-创建-GitHub-仓库" class="headerlink" title="7.1 创建 GitHub 仓库"></a>7.1 创建 GitHub 仓库</h4><p>登录 GitHub 账号，新建一个公开（Public）仓库，仓库名严格设置为 **<code>用户名.github.io</code>**（本实验为 <code>wuziwei23.github.io</code>），且不勾选“Initialize this repository with a README”。GitHub Pages 会将该特殊命名的仓库自动识别为个人站点。</p>
+<h4 id="7-2-安装部署插件"><a href="#7-2-安装部署插件" class="headerlink" title="7.2 安装部署插件"></a>7.2 安装部署插件</h4><p>在项目目录 <code>my-blog</code> 下安装 Git 部署插件：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo<span class="literal">-deployer-git</span> <span class="literal">--save</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="7-3-配置部署信息"><a href="#7-3-配置部署信息" class="headerlink" title="7.3 配置部署信息"></a>7.3 配置部署信息</h4><p>打开项目根目录的 <code>_config.yml</code>，在文件末尾添加 <code>deploy</code> 部署配置，指定部署方式为 git、目标仓库地址及分支：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme:</span> <span class="string">landscape</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/wuziwei23/wuziwei23.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E6%8F%92%E4%BB%B6%E9%83%A8%E7%BD%B2.png" alt="部署配置"><br><em>图1：在 _config.yml 中配置 deploy 项（type: git，repo 指向 wuziwei23.github.io.git，branch: main）</em></p>
+<h4 id="7-4-执行部署"><a href="#7-4-执行部署" class="headerlink" title="7.4 执行部署"></a>7.4 执行部署</h4><p>依次执行清理缓存、生成静态文件、部署三条命令，将博客推送到 GitHub：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>部署日志显示 Hexo 完成了一次提交（<code>Site updated</code>，12 个文件、2475 处新增），随后将 27 个对象推送到远程仓库，新建 <code>main</code> 分支，最终输出 <code>INFO Deploy done: git</code>，表示部署成功。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E9%83%A8%E7%BD%B2github.png" alt="执行部署"><br><em>图2：hexo deploy 将站点推送到 wuziwei23.github.io.git，输出 Deploy done: git</em></p>
+<h4 id="7-5-访问上线的博客"><a href="#7-5-访问上线的博客" class="headerlink" title="7.5 访问上线的博客"></a>7.5 访问上线的博客</h4><p>部署完成后，在浏览器中访问 <strong><a target="_blank" rel="noopener" href="https://wuziwei23.github.io/">https://wuziwei23.github.io</a></strong> ，博客已正式上线，可正常显示 landscape 主题的首页、文章列表（“原神”“Hello World”）以及右侧的归档（Archives）与最近文章（Recent Posts）栏目。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE.png" alt="浏览器访问"><br><em>图3：公网访问 wuziwei23.github.io，博客正常显示已发布的文章</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><p>各项部署操作验证结果汇总如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">测试项</th>
+<th align="left">命令 &#x2F; 操作</th>
+<th align="left">预期结果</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">创建远程仓库</td>
+<td align="left">新建 <code>wuziwei23.github.io</code></td>
+<td align="left">公开仓库创建成功</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">安装部署插件</td>
+<td align="left"><code>npm install hexo-deployer-git --save</code></td>
+<td align="left">插件安装到项目依赖</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">配置部署信息</td>
+<td align="left">编辑 <code>_config.yml</code> 的 <code>deploy</code> 项</td>
+<td align="left">repo &#x2F; branch 配置正确</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">生成并部署</td>
+<td align="left"><code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo deploy</code></td>
+<td align="left">输出 Deploy done: git</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">公网访问博客</td>
+<td align="left">访问 <a target="_blank" rel="noopener" href="https://wuziwei23.github.io/">https://wuziwei23.github.io</a></td>
+<td align="left">博客首页正常显示</td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<p>最终成果：本地 Hexo 博客成功部署到 GitHub Pages，通过 <code>https://wuziwei23.github.io</code> 即可在公网访问，实现了个人博客的免费上线。</p>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>1. 部署相关命令与配置</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">命令 &#x2F; 配置</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>npm install hexo-deployer-git</code></td>
+<td align="left">安装 Hexo 的 Git 部署插件</td>
+</tr>
+<tr>
+<td align="left"><code>hexo clean</code></td>
+<td align="left">清理缓存与已生成的静态文件</td>
+</tr>
+<tr>
+<td align="left"><code>hexo generate</code> &#x2F; <code>hexo g</code></td>
+<td align="left">将源文件编译为静态 HTML</td>
+</tr>
+<tr>
+<td align="left"><code>hexo deploy</code> &#x2F; <code>hexo d</code></td>
+<td align="left">将 <code>public/</code> 中的静态文件推送到远程仓库</td>
+</tr>
+<tr>
+<td align="left"><code>_config.yml</code> 的 <code>deploy</code> 项</td>
+<td align="left">指定部署方式、目标仓库地址与分支</td>
+</tr>
+</tbody></table>
+<p><strong>2. GitHub Pages 部署要点</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">要点</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">仓库命名</td>
+<td align="left">必须为 <code>用户名.github.io</code>，否则无法识别为个人站点</td>
+</tr>
+<tr>
+<td align="left">仓库可见性</td>
+<td align="left">需设为 Public</td>
+</tr>
+<tr>
+<td align="left">部署分支</td>
+<td align="left">与 <code>_config.yml</code> 中 <code>branch</code> 一致（本实验为 main）</td>
+</tr>
+<tr>
+<td align="left">访问地址</td>
+<td align="left"><code>https://用户名.github.io</code></td>
+</tr>
+</tbody></table>
+<p><strong>3. 静态站点部署原理</strong>：Hexo 在本地将 Markdown 与主题模板“提前编译”成纯静态文件（<code>public/</code>），部署插件再将这些文件推送到 GitHub 仓库；GitHub Pages 作为静态托管服务直接对外提供这些文件。整个过程无需服务器后端和数据库，这正是静态站点访问快、部署简单、安全性高的原因。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题现象</th>
+<th align="left">原因分析</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>hexo deploy</code> 提示找不到插件</td>
+<td align="left">未安装 hexo-deployer-git</td>
+<td align="left">执行 <code>npm install hexo-deployer-git --save</code></td>
+</tr>
+<tr>
+<td align="left">部署时提示认证失败</td>
+<td align="left">未配置 Git 凭证或密码不再受支持</td>
+<td align="left">使用 Personal Access Token 代替密码，或配置 Git 凭证缓存</td>
+</tr>
+<tr>
+<td align="left">部署后页面 404</td>
+<td align="left">仓库名不是 <code>用户名.github.io</code></td>
+<td align="left">检查并修正仓库命名</td>
+</tr>
+<tr>
+<td align="left">推送时出现 LF&#x2F;CRLF 换行警告</td>
+<td align="left">Windows 与 Git 换行符差异</td>
+<td align="left">属正常提示，不影响部署，可用 <code>git config core.autocrlf</code> 调整</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>通过本次实验，我完成了个人博客从本地到公网的最后一步——部署上线。在<strong>技术层面</strong>，我理解了静态站点部署的本质：本地 <code>hexo generate</code> 生成的其实就是一堆纯静态文件，部署插件所做的只是把它们推送到一个能对外提供文件访问的仓库，GitHub Pages 则免费承担了托管的角色。相比动态站点需要配置服务器和数据库，这种“生成好再上传”的方式让个人开发者也能零成本拥有一个稳定、快速的网站。</p>
+<p>在<strong>思政层面</strong>，Hexo、Git 以及 GitHub Pages 提供的免费托管服务，让每个学生都能把自己的作品发布到互联网上，这体现了开源生态与开放平台带来的普惠价值。同时我也认识到，个人站点长期依赖国外平台存在访问速度和自主可控方面的隐患，国内的 Gitee Pages 等平台正是有益的补充。作为未来的软件工程师，我应当在善用全球开源资源的同时，关注并支持国产平台与自主可控技术的发展。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" data-id="cmrd42tyq0007c0n35tel01z4" data-title="实验四报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          实验五报告
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">实验三报告</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/07/">July 2026</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/">实验八报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/">实验七报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/">实验六报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/">实验五报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/">实验四报告</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2026 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

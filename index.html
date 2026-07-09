@@ -71,6 +71,1055 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-实验八报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:13.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/">实验八报告</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="实验八-软件部署-——-实验报告"><a href="#实验八-软件部署-——-实验报告" class="headerlink" title="实验八 软件部署 —— 实验报告"></a>实验八 软件部署 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>综合运用前面各实验所学工具，完整体验 Hexo 静态站点从开发到部署的全过程：一方面通过 GitHub Actions 实现自动化部署（CI&#x2F;CD）到 GitHub Pages，另一方面手动将站点部署到 Nginx 云服务器（虚拟机），理解两种部署方式的原理与区别。</p>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li><strong>操作系统</strong>：Windows 11 家庭中文版（本地）+ Ubuntu Server 22.04（虚拟机）</li>
+<li><strong>构建工具</strong>：Hexo 7.x，Node.js 20</li>
+<li><strong>CI&#x2F;CD</strong>：GitHub Actions（<code>peaceiris/actions-gh-pages@v3</code>）</li>
+<li><strong>Web 服务器</strong>：Nginx</li>
+<li><strong>版本控制 &#x2F; 托管</strong>：Git、GitHub（用户名 <code>wuziwei23</code>）</li>
+<li><strong>虚拟机</strong>：IP <code>192.168.80.128</code>，登录用户 <code>wuziwei</code></li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><h3 id="第一部分：GitHub-Pages-自动化部署"><a href="#第一部分：GitHub-Pages-自动化部署" class="headerlink" title="第一部分：GitHub Pages 自动化部署"></a>第一部分：GitHub Pages 自动化部署</h3><h4 id="3-1-准备仓库"><a href="#3-1-准备仓库" class="headerlink" title="3.1 准备仓库"></a>3.1 准备仓库</h4><p>创建两个 GitHub 仓库：源码仓库 <code>my-blog</code>（Private，存放 Hexo 源码）与部署仓库 <code>wuziwei23.github.io</code>（Public，托管静态页面），并将本地博客项目关联到 <code>my-blog</code> 后推送到 <code>main</code> 分支。</p>
+<h4 id="3-2-配置-GitHub-Actions-工作流"><a href="#3-2-配置-GitHub-Actions-工作流" class="headerlink" title="3.2 配置 GitHub Actions 工作流"></a>3.2 配置 GitHub Actions 工作流</h4><p>在项目下新建 <code>.github/workflows/deploy.yml</code>，定义在推送到 <code>main</code> 时自动执行的流水线：检出源码 → 安装 Node.js 20 → 缓存并安装依赖 → <code>hexo generate</code> 生成静态文件 → 创建 <code>.nojekyll</code> → 通过 <code>peaceiris/actions-gh-pages</code> 部署到 <code>wuziwei23.github.io</code>。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AB/%E5%B7%A5%E4%BD%9C%E6%B5%81.png" alt="GitHub Actions 工作流"><br><em>图1：deploy.yml 工作流配置，external_repository 指向 wuziwei23&#x2F;wuziwei23.github.io</em></p>
+<h4 id="3-3-配置-Token-与-Pages"><a href="#3-3-配置-Token-与-Pages" class="headerlink" title="3.3 配置 Token 与 Pages"></a>3.3 配置 Token 与 Pages</h4><p>在 GitHub 生成勾选 <code>repo</code> 权限的 Personal Access Token，添加到源码仓库的 Secrets（名称 <code>PERSONAL_TOKEN</code>）供工作流使用；在部署仓库的 Settings → Pages 中启用 <code>main</code> 分支。此后每次 <code>git push</code> 都会自动触发构建与部署。</p>
+<h4 id="3-4-访问上线站点"><a href="#3-4-访问上线站点" class="headerlink" title="3.4 访问上线站点"></a>3.4 访问上线站点</h4><p>工作流运行成功后，浏览器访问 <strong><a target="_blank" rel="noopener" href="https://wuziwei23.github.io/">https://wuziwei23.github.io</a></strong> ，博客正常显示 Hexo（landscape 主题）首页及「原神」「Hello World」文章。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AB/%E9%83%A8%E7%BD%B2%E5%88%B0github.png" alt="访问 GitHub Pages"><br><em>图2：公网访问 wuziwei23.github.io，自动部署的博客正常显示</em></p>
+<h3 id="第二部分：部署到云服务器（虚拟机）"><a href="#第二部分：部署到云服务器（虚拟机）" class="headerlink" title="第二部分：部署到云服务器（虚拟机）"></a>第二部分：部署到云服务器（虚拟机）</h3><h4 id="3-5-安装配置-Nginx"><a href="#3-5-安装配置-Nginx" class="headerlink" title="3.5 安装配置 Nginx"></a>3.5 安装配置 Nginx</h4><p>在虚拟机中 <code>apt install nginx</code>，创建站点目录 <code>/var/www/blog</code>，并配置 Nginx 站点将根目录指向该目录后 <code>reload</code>。</p>
+<h4 id="3-6-使用-scp-同步静态文件"><a href="#3-6-使用-scp-同步静态文件" class="headerlink" title="3.6 使用 scp 同步静态文件"></a>3.6 使用 scp 同步静态文件</h4><p>本地执行 <code>hexo generate</code> 生成静态文件后，通过 scp 将 <code>public/</code> 下的内容上传到服务器站点目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r public/* wuziwei@192.168.80.128:/var/www/blog/</span><br></pre></td></tr></table></figure>
+
+<p>首次连接确认主机指纹并输入密码后，index.html、banner.jpg、style.css、脚本等文件依次以 100% 传输完成。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AB/%E7%94%A8scp%E5%90%8C%E6%AD%A5%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8.png" alt="scp 同步到服务器"><br><em>图3：scp -r 将 public 下的静态文件同步到 192.168.80.128:&#x2F;var&#x2F;www&#x2F;blog&#x2F;</em></p>
+<h4 id="3-7-访问服务器站点"><a href="#3-7-访问服务器站点" class="headerlink" title="3.7 访问服务器站点"></a>3.7 访问服务器站点</h4><p>浏览器访问虚拟机 IP <strong><a target="_blank" rel="noopener" href="http://192.168.80.128/">http://192.168.80.128</a></strong> ，Nginx 正常返回博客页面，与 GitHub Pages 上的内容一致。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AB/%E9%83%A8%E7%BD%B2%E5%88%B0%E8%99%9A%E6%8B%9F%E6%9C%BA.png" alt="访问虚拟机站点"><br><em>图4：访问 192.168.80.128，Nginx 托管的博客正常显示</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><table>
+<thead>
+<tr>
+<th align="left">测试项</th>
+<th align="left">命令 &#x2F; 操作</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">自动化工作流</td>
+<td align="left">推送 main 触发 GitHub Actions</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">GitHub Pages 访问</td>
+<td align="left">访问 <a target="_blank" rel="noopener" href="https://wuziwei23.github.io/">https://wuziwei23.github.io</a></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">Nginx 站点部署</td>
+<td align="left">安装配置 Nginx，站点目录 <code>/var/www/blog</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">scp 同步文件</td>
+<td align="left"><code>scp -r public/* wuziwei@192.168.80.128:/var/www/blog/</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">服务器站点访问</td>
+<td align="left">访问 <a target="_blank" rel="noopener" href="http://192.168.80.128/">http://192.168.80.128</a></td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<p>同一份 Hexo 博客成功通过「自动化 CI&#x2F;CD → GitHub Pages」和「手动 scp → Nginx 服务器」两种方式完成部署，均可正常访问。</p>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>1. 两种部署方式对比</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">GitHub Pages（自动）</th>
+<th align="left">Nginx 服务器（手动）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">触发方式</td>
+<td align="left">推送代码自动构建部署</td>
+<td align="left">本地生成后手动上传</td>
+</tr>
+<tr>
+<td align="left">部署工具</td>
+<td align="left">GitHub Actions</td>
+<td align="left">scp + Nginx</td>
+</tr>
+<tr>
+<td align="left">托管环境</td>
+<td align="left">GitHub 免费静态托管</td>
+<td align="left">自建云服务器 &#x2F; 虚拟机</td>
+</tr>
+<tr>
+<td align="left">访问地址</td>
+<td align="left"><code>用户名.github.io</code></td>
+<td align="left">服务器 IP &#x2F; 域名</td>
+</tr>
+<tr>
+<td align="left">自主可控</td>
+<td align="left">依赖 GitHub 平台</td>
+<td align="left">完全自主可控</td>
+</tr>
+</tbody></table>
+<p><strong>2. 核心命令与配置</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">命令 &#x2F; 配置</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>.github/workflows/deploy.yml</code></td>
+<td align="left">定义 CI&#x2F;CD 流水线</td>
+</tr>
+<tr>
+<td align="left"><code>secrets.PERSONAL_TOKEN</code></td>
+<td align="left">工作流跨仓库部署所需的访问令牌</td>
+</tr>
+<tr>
+<td align="left"><code>hexo generate</code></td>
+<td align="left">将源文件编译为 <code>public/</code> 静态文件</td>
+</tr>
+<tr>
+<td align="left"><code>scp -r public/* 用户@IP:目录</code></td>
+<td align="left">将静态文件递归上传到服务器</td>
+</tr>
+<tr>
+<td align="left">Nginx <code>root /var/www/blog</code></td>
+<td align="left">指定站点根目录</td>
+</tr>
+</tbody></table>
+<p><strong>3. CI&#x2F;CD 原理</strong>：CI（持续集成）指代码变更后自动构建，CD（持续部署）指构建通过后自动发布。GitHub Actions 在云端完成「检出 → 安装依赖 → 生成 → 部署」全过程，实现推送即上线，无需本地手动操作。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题现象</th>
+<th align="left">原因分析</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">工作流部署失败</td>
+<td align="left">Token 未勾选 <code>repo</code> 权限</td>
+<td align="left">重新生成 Token 并勾选 <code>repo</code></td>
+</tr>
+<tr>
+<td align="left">scp 提示主机指纹未知</td>
+<td align="left">首次连接服务器</td>
+<td align="left">输入 <code>yes</code> 确认后加入 known_hosts</td>
+</tr>
+<tr>
+<td align="left">访问服务器显示默认页</td>
+<td align="left">Nginx 站点配置未生效</td>
+<td align="left">检查 sites-enabled 链接并 reload</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>通过本次实验，我完整走通了静态站点从开发到部署的两条路径。在<strong>技术层面</strong>，GitHub Actions 让我第一次直观体会到 CI&#x2F;CD 的价值——只要 <code>git push</code>，构建和上线就自动完成，把重复劳动交给了流水线；而手动用 scp 部署到 Nginx 服务器，则让我理解了「静态文件 + Web 服务器」这一最朴素的托管本质，两相对比更能看清自动化与自主可控之间的取舍。</p>
+<p>在<strong>思政层面</strong>，GitHub Actions、Nginx 等开源工具与免费平台让个人开发者也能低成本地实践工业级的部署流程，这正是开源生态的普惠价值。同时我也意识到，将服务长期托管在国外平台存在访问速度与自主可控的隐患，自建服务器和国产云平台是必要的补充。作为未来的软件工程师，我应在善用全球开源资源的同时，重视自主可控技术的建设。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/" data-id="cmrd42tyq0006c0n39vl73pzx" data-title="实验八报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-实验七报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:11.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/">实验七报告</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/" data-id="cmrd42typ0004c0n322u46yzg" data-title="实验七报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-实验六报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:09.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/">实验六报告</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="实验六-Linux环境配置-——-实验报告"><a href="#实验六-Linux环境配置-——-实验报告" class="headerlink" title="实验六 Linux环境配置 —— 实验报告"></a>实验六 Linux环境配置 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>通过命令行完成 Linux 系统的基础操作与资源查看，了解常用系统配置文件（<code>/etc/passwd</code>、<code>/etc/group</code> 等）和用户配置文件（<code>~/.bashrc</code>），并掌握环境变量的查看、临时设置与永久设置方法。</p>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li><strong>操作系统</strong>：Ubuntu 24.04.4 LTS（Codename: noble）</li>
+<li><strong>内核版本</strong>：Linux 6.17.0-35-generic，x86_64</li>
+<li><strong>当前用户 &#x2F; 主机</strong>：wuziwei &#x2F; wuziwei（UID 1000）</li>
+<li><strong>登录方式</strong>：SSH 远程登录（客户端 192.168.80.1）</li>
+<li><strong>Shell</strong>：Bash</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><h3 id="步骤一：查看系统信息"><a href="#步骤一：查看系统信息" class="headerlink" title="步骤一：查看系统信息"></a>步骤一：查看系统信息</h3><p>使用 <code>whoami</code>、<code>uname -a</code>、<code>lsb_release -a</code>、<code>hostname</code>、<code>pwd</code> 查看当前用户、内核架构、发行版版本、主机名和工作目录，确认系统为 Ubuntu 24.04.4 LTS，当前用户 wuziwei，主目录 <code>/home/wuziwei</code>。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E4%B8%80.png" alt="系统信息"><br><em>图1：查看当前用户、内核与系统版本信息</em></p>
+<h3 id="步骤二：文件与目录基本操作"><a href="#步骤二：文件与目录基本操作" class="headerlink" title="步骤二：文件与目录基本操作"></a>步骤二：文件与目录基本操作</h3><p>用 <code>ls -lh</code> 列出主目录内容，再依次执行 <code>cd</code>、<code>mkdir</code>、<code>touch</code>、<code>cp</code>、<code>mv</code>、<code>rm</code> 完成目录创建、文件创建、复制、移动与删除等常规操作。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E4%BA%8C.png" alt="文件操作"><br><em>图2：创建目录 test_dir、复制并移动 test.txt 等文件操作</em></p>
+<h3 id="步骤三：查看系统资源状态"><a href="#步骤三：查看系统资源状态" class="headerlink" title="步骤三：查看系统资源状态"></a>步骤三：查看系统资源状态</h3><p>用 <code>top</code> 查看进程与 CPU &#x2F; 内存占用（内存共 3867.9 MiB），用 <code>du -sh *</code> 统计主目录下各子目录的大小。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E4%B8%89.png" alt="资源状态"><br><em>图3：top 查看进程资源占用，du -sh 统计目录大小</em></p>
+<h3 id="步骤四：查看用户与组配置文件"><a href="#步骤四：查看用户与组配置文件" class="headerlink" title="步骤四：查看用户与组配置文件"></a>步骤四：查看用户与组配置文件</h3><p>用 <code>cat /etc/group</code> 查看用户组信息，用 <code>id</code> 查看当前用户的 UID、GID 及所属组，可见 wuziwei 属于 sudo、adm、users 等组，具备管理员权限。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E5%9B%9B.png" alt="用户与组"><br><em>图4：&#x2F;etc&#x2F;group 组信息与 id 命令输出</em></p>
+<h3 id="步骤七：查看环境变量"><a href="#步骤七：查看环境变量" class="headerlink" title="步骤七：查看环境变量"></a>步骤七：查看环境变量</h3><p>用 <code>env</code> 查看全部环境变量，再用 <code>echo $PATH</code>、<code>echo $HOME</code>、<code>echo $USER</code> 单独查看关键变量，可见 PATH 中已包含此前添加的 <code>/home/wuziwei/myenv</code> 路径。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E4%B8%83.png" alt="查看环境变量"><br><em>图5：env 及 PATH &#x2F; HOME &#x2F; USER 变量查看</em></p>
+<h3 id="步骤八：临时设置环境变量"><a href="#步骤八：临时设置环境变量" class="headerlink" title="步骤八：临时设置环境变量"></a>步骤八：临时设置环境变量</h3><p>用 <code>export</code> 向 PATH 追加路径并创建变量 <code>MY_VAR</code>，<code>echo</code> 验证输出 <code>Hello World</code>，再用 <code>unset</code> 删除该变量。此类设置仅在当前终端会话有效。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E5%85%AB.png" alt="临时设置"><br><em>图6：export 创建 &#x2F; unset 删除临时环境变量</em></p>
+<h3 id="步骤九：永久设置环境变量（用户级）"><a href="#步骤九：永久设置环境变量（用户级）" class="headerlink" title="步骤九：永久设置环境变量（用户级）"></a>步骤九：永久设置环境变量（用户级）</h3><p>用 <code>nano ~/.bashrc</code> 编辑用户配置文件，在末尾追加 PATH、自定义变量 <code>MY_CUSTOM_VAR</code> 和别名 <code>ll</code>，保存后执行 <code>source ~/.bashrc</code> 使其对当前用户生效。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E4%B9%9D.png" alt="编辑bashrc"><br><em>图7：在 ~&#x2F;.bashrc 末尾添加 PATH、自定义变量与别名</em></p>
+<h3 id="步骤十：永久设置环境变量（系统级-·-方法三）"><a href="#步骤十：永久设置环境变量（系统级-·-方法三）" class="headerlink" title="步骤十：永久设置环境变量（系统级 · 方法三）"></a>步骤十：永久设置环境变量（系统级 · 方法三）</h3><p>用 <code>sudo nano /etc/profile.d/myenv.sh</code> 新建脚本并写入 <code>export MY_GLOBAL_VAR=&quot;全局变量&quot;</code>，通过 <code>/etc/profile.d/</code> 目录对所有用户生效，是推荐的系统级配置方式。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%85%AD/%E6%AD%A5%E9%AA%A4%E5%8D%81-%E6%96%B9%E6%B3%95%E4%B8%89.png" alt="profile.d"><br><em>图8：在 &#x2F;etc&#x2F;profile.d&#x2F;myenv.sh 中设置全局变量</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><table>
+<thead>
+<tr>
+<th align="left">测试项</th>
+<th align="left">命令 &#x2F; 操作</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看系统信息</td>
+<td align="left"><code>uname -a</code> &#x2F; <code>lsb_release -a</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">文件目录操作</td>
+<td align="left"><code>mkdir</code> &#x2F; <code>cp</code> &#x2F; <code>mv</code> &#x2F; <code>rm</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">查看资源状态</td>
+<td align="left"><code>top</code> &#x2F; <code>du -sh *</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">查看用户与组</td>
+<td align="left"><code>cat /etc/group</code> &#x2F; <code>id</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">查看环境变量</td>
+<td align="left"><code>env</code> &#x2F; <code>echo $PATH</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">临时设置变量</td>
+<td align="left"><code>export MY_VAR</code> → <code>echo</code> 输出正确</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">用户级永久设置</td>
+<td align="left">编辑 <code>~/.bashrc</code> + <code>source</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">系统级永久设置</td>
+<td align="left">新建 <code>/etc/profile.d/myenv.sh</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>1. 常用命令</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>uname -a</code></td>
+<td align="left">查看内核与架构信息</td>
+</tr>
+<tr>
+<td align="left"><code>lsb_release -a</code></td>
+<td align="left">查看发行版版本</td>
+</tr>
+<tr>
+<td align="left"><code>id</code> &#x2F; <code>groups</code></td>
+<td align="left">查看用户 ID 与所属组</td>
+</tr>
+<tr>
+<td align="left"><code>env</code> &#x2F; <code>echo $X</code></td>
+<td align="left">查看环境变量</td>
+</tr>
+<tr>
+<td align="left"><code>export</code> &#x2F; <code>unset</code></td>
+<td align="left">临时设置 &#x2F; 删除变量</td>
+</tr>
+<tr>
+<td align="left"><code>source</code></td>
+<td align="left">重新加载配置文件使其生效</td>
+</tr>
+</tbody></table>
+<p><strong>2. 环境变量配置文件对比</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">配置文件</th>
+<th align="left">作用范围</th>
+<th align="left">加载时机</th>
+<th align="left">生效方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>~/.bashrc</code></td>
+<td align="left">当前用户</td>
+<td align="left">每次打开新终端</td>
+<td align="left"><code>source ~/.bashrc</code></td>
+</tr>
+<tr>
+<td align="left"><code>/etc/profile</code></td>
+<td align="left">所有用户</td>
+<td align="left">用户登录时</td>
+<td align="left">登录 &#x2F; source</td>
+</tr>
+<tr>
+<td align="left"><code>/etc/profile.d/*.sh</code></td>
+<td align="left">所有用户</td>
+<td align="left">用户登录时（推荐）</td>
+<td align="left">登录 &#x2F; source</td>
+</tr>
+<tr>
+<td align="left"><code>/etc/environment</code></td>
+<td align="left">所有用户</td>
+<td align="left">系统级，需重启</td>
+<td align="left">重启</td>
+</tr>
+</tbody></table>
+<p><strong>3. 变量作用范围</strong>：<code>export</code> 直接设置的变量仅在当前会话有效；写入 <code>~/.bashrc</code> 对当前用户永久生效；写入 <code>/etc/profile.d/</code> 则对所有用户生效。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题现象</th>
+<th align="left">原因</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">修改 <code>~/.bashrc</code> 后不生效</td>
+<td align="left">未重新加载配置</td>
+<td align="left">执行 <code>source ~/.bashrc</code></td>
+</tr>
+<tr>
+<td align="left">编辑 <code>/etc/</code> 下文件被拒绝</td>
+<td align="left">普通用户权限不足</td>
+<td align="left">命令前加 <code>sudo</code> 提权</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>通过本次实验，我熟悉了 Linux 命令行的基础操作，也理解了环境变量“临时”与“永久”、“用户级”与“系统级”之间的区别：<code>export</code> 只作用于当前会话，<code>~/.bashrc</code> 面向单个用户，而 <code>/etc/profile.d/</code> 面向所有用户，配置的层级决定了它的作用范围。这种分层设计让系统在灵活性与统一管理之间取得了平衡。</p>
+<p>在思政层面，Linux 作为开源操作系统的代表，其开放的源码和清晰的配置体系让每个使用者都能理解并掌控自己的系统，这正是开源精神的体现。作为未来的软件工程师，扎实掌握 Linux 环境配置是服务端开发与运维的基本功，也让我更加体会到自主可控的底层技术能力的重要性。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/" data-id="cmrd42typ0005c0n38pdf1n7v" data-title="实验六报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-实验五报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:07.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/">实验五报告</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/" data-id="cmrd42typ0002c0n331keg7yw" data-title="实验五报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-实验四报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:06.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/">实验四报告</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="实验四-Web-站点构建-——-实验报告"><a href="#实验四-Web-站点构建-——-实验报告" class="headerlink" title="实验四 Web 站点构建 —— 实验报告"></a>实验四 Web 站点构建 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>本次实验旨在将实验二中已在本地搭建好的 Hexo 静态博客部署到 GitHub Pages，使其正式上线并可被公网访问，从而掌握静态站点“本地生成 → 远程部署 → 免费上线”的完整流程，理解静态站点生成器（SSG）的部署原理及其与动态站点的区别。</p>
+<blockquote>
+<p><strong>说明</strong>：实验四的步骤一至步骤六（环境准备、安装 Hexo、初始化项目、本地预览、编写文章、更换主题）已在<strong>实验二</strong>中完成，故本报告从<strong>步骤七：部署到 GitHub Pages</strong> 开始记录。</p>
+</blockquote>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li><strong>操作系统</strong>：Windows 11 家庭中文版（内部版本号 10.0.26100）</li>
+<li><strong>构建工具</strong>：hexo-cli 4.3.2，Hexo 7.3.0</li>
+<li><strong>博客主题</strong>：landscape（Hexo 默认主题）</li>
+<li><strong>部署插件</strong>：hexo-deployer-git</li>
+<li><strong>版本控制</strong>：Git 2.53.0.windows.2</li>
+<li><strong>代码托管 &#x2F; 部署平台</strong>：GitHub Pages（仓库 <code>wuziwei23.github.io</code>）</li>
+<li><strong>终端</strong>：Windows PowerShell</li>
+<li><strong>网络</strong>：可访问互联网</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><h3 id="步骤七：部署到-GitHub-Pages（免费上线）"><a href="#步骤七：部署到-GitHub-Pages（免费上线）" class="headerlink" title="步骤七：部署到 GitHub Pages（免费上线）"></a>步骤七：部署到 GitHub Pages（免费上线）</h3><h4 id="7-1-创建-GitHub-仓库"><a href="#7-1-创建-GitHub-仓库" class="headerlink" title="7.1 创建 GitHub 仓库"></a>7.1 创建 GitHub 仓库</h4><p>登录 GitHub 账号，新建一个公开（Public）仓库，仓库名严格设置为 **<code>用户名.github.io</code>**（本实验为 <code>wuziwei23.github.io</code>），且不勾选“Initialize this repository with a README”。GitHub Pages 会将该特殊命名的仓库自动识别为个人站点。</p>
+<h4 id="7-2-安装部署插件"><a href="#7-2-安装部署插件" class="headerlink" title="7.2 安装部署插件"></a>7.2 安装部署插件</h4><p>在项目目录 <code>my-blog</code> 下安装 Git 部署插件：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo<span class="literal">-deployer-git</span> <span class="literal">--save</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="7-3-配置部署信息"><a href="#7-3-配置部署信息" class="headerlink" title="7.3 配置部署信息"></a>7.3 配置部署信息</h4><p>打开项目根目录的 <code>_config.yml</code>，在文件末尾添加 <code>deploy</code> 部署配置，指定部署方式为 git、目标仓库地址及分支：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme:</span> <span class="string">landscape</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/wuziwei23/wuziwei23.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E6%8F%92%E4%BB%B6%E9%83%A8%E7%BD%B2.png" alt="部署配置"><br><em>图1：在 _config.yml 中配置 deploy 项（type: git，repo 指向 wuziwei23.github.io.git，branch: main）</em></p>
+<h4 id="7-4-执行部署"><a href="#7-4-执行部署" class="headerlink" title="7.4 执行部署"></a>7.4 执行部署</h4><p>依次执行清理缓存、生成静态文件、部署三条命令，将博客推送到 GitHub：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>部署日志显示 Hexo 完成了一次提交（<code>Site updated</code>，12 个文件、2475 处新增），随后将 27 个对象推送到远程仓库，新建 <code>main</code> 分支，最终输出 <code>INFO Deploy done: git</code>，表示部署成功。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E9%83%A8%E7%BD%B2github.png" alt="执行部署"><br><em>图2：hexo deploy 将站点推送到 wuziwei23.github.io.git，输出 Deploy done: git</em></p>
+<h4 id="7-5-访问上线的博客"><a href="#7-5-访问上线的博客" class="headerlink" title="7.5 访问上线的博客"></a>7.5 访问上线的博客</h4><p>部署完成后，在浏览器中访问 <strong><a target="_blank" rel="noopener" href="https://wuziwei23.github.io/">https://wuziwei23.github.io</a></strong> ，博客已正式上线，可正常显示 landscape 主题的首页、文章列表（“原神”“Hello World”）以及右侧的归档（Archives）与最近文章（Recent Posts）栏目。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E5%9B%9B/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE.png" alt="浏览器访问"><br><em>图3：公网访问 wuziwei23.github.io，博客正常显示已发布的文章</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><p>各项部署操作验证结果汇总如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">测试项</th>
+<th align="left">命令 &#x2F; 操作</th>
+<th align="left">预期结果</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">创建远程仓库</td>
+<td align="left">新建 <code>wuziwei23.github.io</code></td>
+<td align="left">公开仓库创建成功</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">安装部署插件</td>
+<td align="left"><code>npm install hexo-deployer-git --save</code></td>
+<td align="left">插件安装到项目依赖</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">配置部署信息</td>
+<td align="left">编辑 <code>_config.yml</code> 的 <code>deploy</code> 项</td>
+<td align="left">repo &#x2F; branch 配置正确</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">生成并部署</td>
+<td align="left"><code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo deploy</code></td>
+<td align="left">输出 Deploy done: git</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">公网访问博客</td>
+<td align="left">访问 <a target="_blank" rel="noopener" href="https://wuziwei23.github.io/">https://wuziwei23.github.io</a></td>
+<td align="left">博客首页正常显示</td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<p>最终成果：本地 Hexo 博客成功部署到 GitHub Pages，通过 <code>https://wuziwei23.github.io</code> 即可在公网访问，实现了个人博客的免费上线。</p>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>1. 部署相关命令与配置</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">命令 &#x2F; 配置</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>npm install hexo-deployer-git</code></td>
+<td align="left">安装 Hexo 的 Git 部署插件</td>
+</tr>
+<tr>
+<td align="left"><code>hexo clean</code></td>
+<td align="left">清理缓存与已生成的静态文件</td>
+</tr>
+<tr>
+<td align="left"><code>hexo generate</code> &#x2F; <code>hexo g</code></td>
+<td align="left">将源文件编译为静态 HTML</td>
+</tr>
+<tr>
+<td align="left"><code>hexo deploy</code> &#x2F; <code>hexo d</code></td>
+<td align="left">将 <code>public/</code> 中的静态文件推送到远程仓库</td>
+</tr>
+<tr>
+<td align="left"><code>_config.yml</code> 的 <code>deploy</code> 项</td>
+<td align="left">指定部署方式、目标仓库地址与分支</td>
+</tr>
+</tbody></table>
+<p><strong>2. GitHub Pages 部署要点</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">要点</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">仓库命名</td>
+<td align="left">必须为 <code>用户名.github.io</code>，否则无法识别为个人站点</td>
+</tr>
+<tr>
+<td align="left">仓库可见性</td>
+<td align="left">需设为 Public</td>
+</tr>
+<tr>
+<td align="left">部署分支</td>
+<td align="left">与 <code>_config.yml</code> 中 <code>branch</code> 一致（本实验为 main）</td>
+</tr>
+<tr>
+<td align="left">访问地址</td>
+<td align="left"><code>https://用户名.github.io</code></td>
+</tr>
+</tbody></table>
+<p><strong>3. 静态站点部署原理</strong>：Hexo 在本地将 Markdown 与主题模板“提前编译”成纯静态文件（<code>public/</code>），部署插件再将这些文件推送到 GitHub 仓库；GitHub Pages 作为静态托管服务直接对外提供这些文件。整个过程无需服务器后端和数据库，这正是静态站点访问快、部署简单、安全性高的原因。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题现象</th>
+<th align="left">原因分析</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>hexo deploy</code> 提示找不到插件</td>
+<td align="left">未安装 hexo-deployer-git</td>
+<td align="left">执行 <code>npm install hexo-deployer-git --save</code></td>
+</tr>
+<tr>
+<td align="left">部署时提示认证失败</td>
+<td align="left">未配置 Git 凭证或密码不再受支持</td>
+<td align="left">使用 Personal Access Token 代替密码，或配置 Git 凭证缓存</td>
+</tr>
+<tr>
+<td align="left">部署后页面 404</td>
+<td align="left">仓库名不是 <code>用户名.github.io</code></td>
+<td align="left">检查并修正仓库命名</td>
+</tr>
+<tr>
+<td align="left">推送时出现 LF&#x2F;CRLF 换行警告</td>
+<td align="left">Windows 与 Git 换行符差异</td>
+<td align="left">属正常提示，不影响部署，可用 <code>git config core.autocrlf</code> 调整</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>通过本次实验，我完成了个人博客从本地到公网的最后一步——部署上线。在<strong>技术层面</strong>，我理解了静态站点部署的本质：本地 <code>hexo generate</code> 生成的其实就是一堆纯静态文件，部署插件所做的只是把它们推送到一个能对外提供文件访问的仓库，GitHub Pages 则免费承担了托管的角色。相比动态站点需要配置服务器和数据库，这种“生成好再上传”的方式让个人开发者也能零成本拥有一个稳定、快速的网站。</p>
+<p>在<strong>思政层面</strong>，Hexo、Git 以及 GitHub Pages 提供的免费托管服务，让每个学生都能把自己的作品发布到互联网上，这体现了开源生态与开放平台带来的普惠价值。同时我也认识到，个人站点长期依赖国外平台存在访问速度和自主可控方面的隐患，国内的 Gitee Pages 等平台正是有益的补充。作为未来的软件工程师，我应当在善用全球开源资源的同时，关注并支持国产平台与自主可控技术的发展。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/" data-id="cmrd42tyq0007c0n35tel01z4" data-title="实验四报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-实验三报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:04.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/">实验三报告</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="实验三-代码编辑器-——-实验报告"><a href="#实验三-代码编辑器-——-实验报告" class="headerlink" title="实验三 代码编辑器 —— 实验报告"></a>实验三 代码编辑器 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>本次实验旨在安装并使用 Visual Studio Code 代码编辑器，通过安装 Markdown 相关插件掌握编辑器插件的扩展机制，并运用 Markdown 基础语法完成一个文档的编辑与实时渲染。</p>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li><strong>操作系统</strong>：Windows 11 家庭中文版（内部版本号 10.0.26100）</li>
+<li><strong>代码编辑器</strong>：Visual Studio Code</li>
+<li><strong>核心插件</strong>：Markdown All in One 3.6.3、Markdown Preview Enhanced 0.8.30</li>
+<li><strong>辅助插件</strong>：Prettier（格式化）、markdownlint（语法检查）</li>
+<li><strong>网络</strong>：可访问互联网（用于下载软件与安装插件）</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><h3 id="步骤一：安装-VS-Code-并安装-Markdown-插件"><a href="#步骤一：安装-VS-Code-并安装-Markdown-插件" class="headerlink" title="步骤一：安装 VS Code 并安装 Markdown 插件"></a>步骤一：安装 VS Code 并安装 Markdown 插件</h3><p>从官网 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a> 下载安装包完成安装（勾选“添加到 PATH”）。启动后按 <code>Ctrl + Shift + X</code> 打开扩展面板，搜索并安装 <strong>Markdown All in One</strong> 插件，用于提供目录生成、快捷键、列表自动延续等写作增强功能。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%89/mdaio.png" alt="Markdown All in One"><br><em>图1：安装 Markdown All in One 插件（版本 3.6.3，作者 Yu Zhang）</em></p>
+<h3 id="步骤二：安装-Markdown-Preview-Enhanced-插件"><a href="#步骤二：安装-Markdown-Preview-Enhanced-插件" class="headerlink" title="步骤二：安装 Markdown Preview Enhanced 插件"></a>步骤二：安装 Markdown Preview Enhanced 插件</h3><p>继续在扩展面板中搜索并安装 <strong>Markdown Preview Enhanced</strong> 插件，该插件支持数学公式、Mermaid 流程图以及导出 PDF&#x2F;HTML，用于增强 Markdown 的实时预览能力。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%89/mdpe.png" alt="Markdown Preview Enhanced"><br><em>图2：安装 Markdown Preview Enhanced 插件（版本 0.8.30，作者 Yiyi Wang）</em></p>
+<h3 id="步骤三：创建并编辑-Markdown-文档，实时预览渲染效果"><a href="#步骤三：创建并编辑-Markdown-文档，实时预览渲染效果" class="headerlink" title="步骤三：创建并编辑 Markdown 文档，实时预览渲染效果"></a>步骤三：创建并编辑 Markdown 文档，实时预览渲染效果</h3><p>新建 <code>test.md</code> 文件，使用标题（<code>#</code>）、加粗（<code>**</code>）、无序列表（<code>-</code>）和代码块等基础语法编写内容。编辑时按 <code>Ctrl + K V</code> 开启并排预览，左侧源码与右侧渲染结果实时同步更新。文档源码如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 我的第一个Markdown文档</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 什么是Markdown？</span></span><br><span class="line"></span><br><span class="line">Markdown是一种<span class="strong">**轻量级**</span>的标记语言。</span><br><span class="line"></span><br><span class="line"><span class="section">### Markdown的核心特点</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> <span class="strong">**简洁性**</span>：仅需少量符号即可完成排版</span><br><span class="line"><span class="bullet">-</span> <span class="strong">**可读性**</span>：纯文本仍然清晰易读</span><br><span class="line"><span class="bullet">-</span> <span class="strong">**兼容性**</span>：支持GitHub、博客平台等多种场景</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%B8%89/%E6%9C%80%E7%BB%88%E5%B1%95%E7%A4%BA.png" alt="最终展示"><br><em>图3：左侧为 Markdown 源码，右侧为实时渲染的预览效果</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><p>各项操作验证结果汇总如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">测试项</th>
+<th align="left">操作 &#x2F; 命令</th>
+<th align="left">预期结果</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">VS Code 安装</td>
+<td align="left">运行安装包</td>
+<td align="left">正常启动编辑器</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">安装插件（AIO）</td>
+<td align="left">扩展面板搜索安装</td>
+<td align="left">Markdown All in One 3.6.3</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">安装插件（MPE）</td>
+<td align="left">扩展面板搜索安装</td>
+<td align="left">Markdown Preview Enhanced 0.8.30</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">编写 Markdown 文档</td>
+<td align="left">新建并编辑 <code>test.md</code></td>
+<td align="left">语法书写正确</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">实时预览</td>
+<td align="left"><code>Ctrl + K V</code> 并排预览</td>
+<td align="left">标题&#x2F;加粗&#x2F;列表&#x2F;代码块正常渲染</td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<p>最终成果：一个使用 VS Code 编写的 <code>test.md</code> 文档，标题、加粗、列表、代码块等语法均能被插件正确渲染，源码与预览并排实时同步。</p>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>1. 代码编辑器 vs 集成开发环境（IDE）</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">特点</th>
+<th align="left">典型代表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">代码编辑器</td>
+<td align="left">轻量、启动快、以编辑为核心、靠插件扩展</td>
+<td align="left">VS Code、Sublime Text</td>
+</tr>
+<tr>
+<td align="left">IDE</td>
+<td align="left">功能全面，集成编译&#x2F;调试&#x2F;构建工具链</td>
+<td align="left">IntelliJ IDEA、PyCharm</td>
+</tr>
+</tbody></table>
+<p><strong>2. 本实验涉及的常用插件</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">插件</th>
+<th align="left">主要功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Markdown All in One</td>
+<td align="left">目录生成、快捷键、列表自动延续</td>
+</tr>
+<tr>
+<td align="left">Markdown Preview Enhanced</td>
+<td align="left">实时预览、数学公式、Mermaid、导出 PDF</td>
+</tr>
+<tr>
+<td align="left">Prettier</td>
+<td align="left">代码 &#x2F; 文档格式化</td>
+</tr>
+<tr>
+<td align="left">markdownlint</td>
+<td align="left">Markdown 语法与格式规范检查</td>
+</tr>
+</tbody></table>
+<p><strong>3. Markdown 基础语法</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">语法</th>
+<th align="left">符号</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">标题</td>
+<td align="left"><code>#</code> ~ <code>######</code></td>
+<td align="left">一到六级标题</td>
+</tr>
+<tr>
+<td align="left">加粗</td>
+<td align="left"><code>**文本**</code></td>
+<td align="left">文字加粗</td>
+</tr>
+<tr>
+<td align="left">无序列表</td>
+<td align="left"><code>- </code> &#x2F; <code>* </code></td>
+<td align="left">列表项</td>
+</tr>
+<tr>
+<td align="left">代码块</td>
+<td align="left"><code>```</code></td>
+<td align="left">多行代码&#x2F;语法高亮</td>
+</tr>
+</tbody></table>
+<p><strong>4. 常用快捷键</strong>：<code>Ctrl + Shift + X</code>（扩展面板）、<code>Ctrl + K V</code>（并排预览）、<code>Ctrl + ,</code>（设置）。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题现象</th>
+<th align="left">原因分析</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">扩展面板搜索不到插件</td>
+<td align="left">网络问题或关键词不准确</td>
+<td align="left">检查网络连接，使用插件全名精确搜索</td>
+</tr>
+<tr>
+<td align="left">预览窗口不随源码更新</td>
+<td align="left">未开启并排预览或焦点在预览侧</td>
+<td align="left">使用 <code>Ctrl + K V</code> 打开并排预览</td>
+</tr>
+<tr>
+<td align="left">代码块未高亮</td>
+<td align="left">未指定语言</td>
+<td align="left">在起始代码围栏后补上语言标识（如 <code>javascript</code>）</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>通过本次实验，我掌握了 VS Code 的安装与插件扩展机制。在<strong>技术层面</strong>，我理解了代码编辑器“轻量内核 + 插件生态”的设计思想：编辑器本身只提供基础编辑能力，各种功能（Markdown 预览、格式化、语法检查）都通过插件按需叠加，这种模块化方式既保证了启动速度，又带来了极强的灵活性；同时也熟悉了 Markdown“用少量符号完成结构化排版”的简洁写法。</p>
+<p>在<strong>思政层面</strong>，VS Code、Markdown All in One、Markdown Preview Enhanced 等工具均为开源免费软件，正是开源社区共享协作精神的体现——一个由个人开发者维护的插件能被近千万用户使用，说明开放共享能创造巨大价值。作为未来的软件工程师，我应善用并积极回馈开源生态，同时关注并支持国产编辑器与工具的发展，为自主可控的软件生态贡献力量。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" data-id="cmrd42tyq0008c0n3fnz5bruh" data-title="实验三报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-实验二报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:02.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/">实验二报告</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="实验二-Web软件开发环境-——-实验报告"><a href="#实验二-Web软件开发环境-——-实验报告" class="headerlink" title="实验二 Web软件开发环境 —— 实验报告"></a>实验二 Web软件开发环境 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>搭建 Web 开发环境（Node.js、npm、Git），安装并运行 Hexo 静态博客框架，完成博客初始化、写文章、本地预览与静态页面生成的完整流程，理解静态站点与动态站点的区别。</p>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li>操作系统：Windows 11 家庭中文版（10.0.26100）</li>
+<li>Node.js v24.14.1 &#x2F; npm 11.12.1 &#x2F; Git 2.53.0.windows.2</li>
+<li>hexo-cli 4.3.2 &#x2F; Hexo 7.3.0，主题 landscape（默认）</li>
+<li>编辑器：VS Code；终端：PowerShell</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><p><strong>步骤一：安装并验证 Node.js 与 npm</strong>　安装 LTS 版本后执行 <code>node --version</code>、<code>npm --version</code> 验证。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/nodejs%E5%92%8Cnpm%E7%89%88%E6%9C%AC.png" alt="Node.js与npm版本"><br><em>图1：Node.js v24.14.1、npm 11.12.1</em></p>
+<p><strong>步骤二：安装 Git</strong>　执行 <code>git --version</code> 验证，并用 <code>git config --global</code> 配置用户名与邮箱。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/git%E7%89%88%E6%9C%AC.png" alt="Git版本"><br><em>图2：Git 2.53.0.windows.2</em></p>
+<p><strong>步骤三：安装 Hexo CLI</strong>　执行 <code>npm install -g hexo-cli</code>，再用 <code>hexo -v</code> 查看版本及依赖。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/hexo%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.png" alt="Hexo版本信息"><br><em>图3：hexo-cli 4.3.2</em></p>
+<p><strong>步骤四：初始化并预览博客</strong>　执行 <code>hexo init my-blog</code> 初始化项目，在项目目录下 <code>hexo server</code> 启动本地服务，浏览器访问 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a> 查看默认首页。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E5%8D%9A%E5%AE%A2%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%9D%E9%83%A8%E7%BD%B2.png" alt="启动本地服务器"><br><em>图4：hexo server 运行于 localhost:4000</em></p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE.png" alt="默认博客首页"><br><em>图5：默认 Hexo 博客首页（landscape 主题）</em></p>
+<p><strong>步骤五：创建并发布文章</strong>　<code>hexo new &quot;我的第一篇博客&quot;</code> 生成 Markdown 文件，编辑正文（使用引用、表格等语法）后执行 <code>hexo generate</code> 生成静态页面，刷新即可看到新文章。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2.png" alt="生成静态文件"><br><em>图6：hexo generate 生成 11 个文件（119 ms）</em></p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E7%AC%AC%E4%B8%80%E7%AF%87blog.png" alt="发布后的首页"><br><em>图7：首页显示 “我的第一篇博客”</em></p>
+<p><strong>步骤六（拓展）：Git 版本管理</strong>　将博客源码纳入 Git，多次提交后用 <code>git log</code> 查看历史。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6.png" alt="Git提交历史"><br><em>图8：git log 显示的提交历史（HEAD -&gt; master）</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><table>
+<thead>
+<tr>
+<th align="left">验证项</th>
+<th align="left">操作</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">环境安装</td>
+<td align="left">node &#x2F; npm &#x2F; git &#x2F; hexo 版本验证</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">本地预览</td>
+<td align="left">访问 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">发布文章</td>
+<td align="left"><code>hexo new</code> + <code>hexo generate</code></td>
+<td align="left">✅ 成功（11 个静态文件）</td>
+</tr>
+<tr>
+<td align="left">版本管理</td>
+<td align="left"><code>git log</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<p>最终成果：一个可本地访问的 Hexo 静态博客，包含自行发布的原创文章，源码已纳入 Git 管理。</p>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>Web 开发环境核心组件</strong>：Node.js（运行时）、npm（包管理）、Git（版本控制）、Hexo（构建工具）。</p>
+<p><strong>Hexo 常用命令</strong>：<code>hexo init</code>（初始化）、<code>hexo new</code>（新建文章）、<code>hexo generate/g</code>（生成静态文件）、<code>hexo server/s</code>（本地预览）、<code>hexo clean</code>（清理缓存）。</p>
+<p><strong>静态 vs 动态博客</strong>：静态站点在构建时预先生成 HTML，无需数据库、访问快、安全性高（Hexo）；动态站点在访问时由服务器实时生成，功能丰富但需数据库（WordPress）。</p>
+<p><strong>Front-matter</strong>：Markdown 开头 <code>---</code> 之间的区域，用于定义文章元数据（title、date、tags 等）。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>npm install</code> 速度慢</td>
+<td align="left">切换国内镜像源 <code>npm config set registry https://registry.npmmirror.com</code></td>
+</tr>
+<tr>
+<td align="left"><code>hexo</code> 命令无法识别</td>
+<td align="left">全局安装 <code>npm install -g hexo-cli</code> 并重启终端</td>
+</tr>
+<tr>
+<td align="left">改文章后页面未更新</td>
+<td align="left">重新执行 <code>hexo generate</code> 生成静态文件</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>本次实验让我理清了 Node.js、npm、Git、Hexo 之间的协作关系，并直观体会到静态站点“提前编译、访问快、免数据库”的优势。这些工具全部开源免费，让我零成本搭建起个人博客，体现了开源社区的共享精神；同时国内 npmmirror 镜像也让我认识到自主可控基础设施的重要性。作为未来的软件工程师，我应积极参与开源社区，为国产开源生态贡献力量。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" data-id="cmrd42typ0003c0n3hxck2lsb" data-title="实验二报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-原神" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/08/%E5%8E%9F%E7%A5%9E/" class="article-date">
+  <time class="dt-published" datetime="2026-07-08T06:32:41.000Z" itemprop="datePublished">2026-07-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/07/08/%E5%8E%9F%E7%A5%9E/">原神</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>原来你也玩原神</p>
+<blockquote>
+<p>玩原神可以让心情变好</p>
+</blockquote>
+<blockquote>
+<p>[!NOTE]</p>
+<p>今天你玩原神了吗？？？</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>玩原神的日期</th>
+<th>游戏内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>07.01</td>
+<td>今天我杀了丘丘人</td>
+</tr>
+<tr>
+<td>07.02</td>
+<td>神里凌华</td>
+</tr>
+<tr>
+<td>07.03</td>
+<td>今天我杀了丘丘人</td>
+</tr>
+<tr>
+<td>07.04</td>
+<td>今天我杀了丘丘人</td>
+</tr>
+<tr>
+<td>07.05</td>
+<td>今天我杀了丘丘人</td>
+</tr>
+<tr>
+<td>07.06</td>
+<td>今天我杀了丘丘人</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/08/%E5%8E%9F%E7%A5%9E/" data-id="cmrd42tyo0001c0n33km08l0n" data-title="原神" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2026/07/07/hello-world/" class="article-date">
@@ -110,7 +1159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2026/07/07/hello-world/" data-id="cmrbp2q1w0000wwn34hrrcdg2" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2026/07/07/hello-world/" data-id="cmrd42tyl0000c0n3gbr6gh3w" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -153,7 +1202,23 @@
       <ul>
         
           <li>
-            <a href="/2026/07/07/hello-world/">Hello World</a>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/">实验八报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/">实验七报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/">实验六报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/">实验五报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/">实验四报告</a>
           </li>
         
       </ul>

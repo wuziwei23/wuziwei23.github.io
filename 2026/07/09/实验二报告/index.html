@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>实验二报告 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="实验二 Web软件开发环境 —— 实验报告一、实验目的搭建 Web 开发环境（Node.js、npm、Git），安装并运行 Hexo 静态博客框架，完成博客初始化、写文章、本地预览与静态页面生成的完整流程，理解静态站点与动态站点的区别。 二、实验环境 操作系统：Windows 11 家庭中文版（10.0.26100） Node.js v24.14.1 &#x2F; npm 11.12.1 &amp;#x2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实验二报告">
+<meta property="og:url" content="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="实验二 Web软件开发环境 —— 实验报告一、实验目的搭建 Web 开发环境（Node.js、npm、Git），安装并运行 Hexo 静态博客框架，完成博客初始化、写文章、本地预览与静态页面生成的完整流程，理解静态站点与动态站点的区别。 二、实验环境 操作系统：Windows 11 家庭中文版（10.0.26100） Node.js v24.14.1 &#x2F; npm 11.12.1 &amp;#x2">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/nodejs%E5%92%8Cnpm%E7%89%88%E6%9C%AC.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/git%E7%89%88%E6%9C%AC.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/hexo%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E5%8D%9A%E5%AE%A2%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%9D%E9%83%A8%E7%BD%B2.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E7%AC%AC%E4%B8%80%E7%AF%87blog.png">
+<meta property="og:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6.png">
+<meta property="article:published_time" content="2026-07-09T05:56:02.000Z">
+<meta property="article:modified_time" content="2026-07-09T06:03:55.733Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/nodejs%E5%92%8Cnpm%E7%89%88%E6%9C%AC.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-实验二报告" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" class="article-date">
+  <time class="dt-published" datetime="2026-07-09T05:56:02.000Z" itemprop="datePublished">2026-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      实验二报告
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="实验二-Web软件开发环境-——-实验报告"><a href="#实验二-Web软件开发环境-——-实验报告" class="headerlink" title="实验二 Web软件开发环境 —— 实验报告"></a>实验二 Web软件开发环境 —— 实验报告</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>搭建 Web 开发环境（Node.js、npm、Git），安装并运行 Hexo 静态博客框架，完成博客初始化、写文章、本地预览与静态页面生成的完整流程，理解静态站点与动态站点的区别。</p>
+<h2 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h2><ul>
+<li>操作系统：Windows 11 家庭中文版（10.0.26100）</li>
+<li>Node.js v24.14.1 &#x2F; npm 11.12.1 &#x2F; Git 2.53.0.windows.2</li>
+<li>hexo-cli 4.3.2 &#x2F; Hexo 7.3.0，主题 landscape（默认）</li>
+<li>编辑器：VS Code；终端：PowerShell</li>
+</ul>
+<h2 id="三、实验过程"><a href="#三、实验过程" class="headerlink" title="三、实验过程"></a>三、实验过程</h2><p><strong>步骤一：安装并验证 Node.js 与 npm</strong>　安装 LTS 版本后执行 <code>node --version</code>、<code>npm --version</code> 验证。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/nodejs%E5%92%8Cnpm%E7%89%88%E6%9C%AC.png" alt="Node.js与npm版本"><br><em>图1：Node.js v24.14.1、npm 11.12.1</em></p>
+<p><strong>步骤二：安装 Git</strong>　执行 <code>git --version</code> 验证，并用 <code>git config --global</code> 配置用户名与邮箱。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/git%E7%89%88%E6%9C%AC.png" alt="Git版本"><br><em>图2：Git 2.53.0.windows.2</em></p>
+<p><strong>步骤三：安装 Hexo CLI</strong>　执行 <code>npm install -g hexo-cli</code>，再用 <code>hexo -v</code> 查看版本及依赖。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/hexo%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.png" alt="Hexo版本信息"><br><em>图3：hexo-cli 4.3.2</em></p>
+<p><strong>步骤四：初始化并预览博客</strong>　执行 <code>hexo init my-blog</code> 初始化项目，在项目目录下 <code>hexo server</code> 启动本地服务，浏览器访问 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a> 查看默认首页。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E5%8D%9A%E5%AE%A2%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%9D%E9%83%A8%E7%BD%B2.png" alt="启动本地服务器"><br><em>图4：hexo server 运行于 localhost:4000</em></p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE.png" alt="默认博客首页"><br><em>图5：默认 Hexo 博客首页（landscape 主题）</em></p>
+<p><strong>步骤五：创建并发布文章</strong>　<code>hexo new &quot;我的第一篇博客&quot;</code> 生成 Markdown 文件，编辑正文（使用引用、表格等语法）后执行 <code>hexo generate</code> 生成静态页面，刷新即可看到新文章。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2.png" alt="生成静态文件"><br><em>图6：hexo generate 生成 11 个文件（119 ms）</em></p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/%E7%AC%AC%E4%B8%80%E7%AF%87blog.png" alt="发布后的首页"><br><em>图7：首页显示 “我的第一篇博客”</em></p>
+<p><strong>步骤六（拓展）：Git 版本管理</strong>　将博客源码纳入 Git，多次提交后用 <code>git log</code> 查看历史。</p>
+<p><img src="/images/%E5%AE%9E%E9%AA%8C%E4%BA%8C/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6.png" alt="Git提交历史"><br><em>图8：git log 显示的提交历史（HEAD -&gt; master）</em></p>
+<h2 id="四、实验结果"><a href="#四、实验结果" class="headerlink" title="四、实验结果"></a>四、实验结果</h2><table>
+<thead>
+<tr>
+<th align="left">验证项</th>
+<th align="left">操作</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">环境安装</td>
+<td align="left">node &#x2F; npm &#x2F; git &#x2F; hexo 版本验证</td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">本地预览</td>
+<td align="left">访问 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a></td>
+<td align="left">✅ 成功</td>
+</tr>
+<tr>
+<td align="left">发布文章</td>
+<td align="left"><code>hexo new</code> + <code>hexo generate</code></td>
+<td align="left">✅ 成功（11 个静态文件）</td>
+</tr>
+<tr>
+<td align="left">版本管理</td>
+<td align="left"><code>git log</code></td>
+<td align="left">✅ 成功</td>
+</tr>
+</tbody></table>
+<p>最终成果：一个可本地访问的 Hexo 静态博客，包含自行发布的原创文章，源码已纳入 Git 管理。</p>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><p><strong>Web 开发环境核心组件</strong>：Node.js（运行时）、npm（包管理）、Git（版本控制）、Hexo（构建工具）。</p>
+<p><strong>Hexo 常用命令</strong>：<code>hexo init</code>（初始化）、<code>hexo new</code>（新建文章）、<code>hexo generate/g</code>（生成静态文件）、<code>hexo server/s</code>（本地预览）、<code>hexo clean</code>（清理缓存）。</p>
+<p><strong>静态 vs 动态博客</strong>：静态站点在构建时预先生成 HTML，无需数据库、访问快、安全性高（Hexo）；动态站点在访问时由服务器实时生成，功能丰富但需数据库（WordPress）。</p>
+<p><strong>Front-matter</strong>：Markdown 开头 <code>---</code> 之间的区域，用于定义文章元数据（title、date、tags 等）。</p>
+<h2 id="六、出现问题"><a href="#六、出现问题" class="headerlink" title="六、出现问题"></a>六、出现问题</h2><table>
+<thead>
+<tr>
+<th align="left">问题</th>
+<th align="left">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>npm install</code> 速度慢</td>
+<td align="left">切换国内镜像源 <code>npm config set registry https://registry.npmmirror.com</code></td>
+</tr>
+<tr>
+<td align="left"><code>hexo</code> 命令无法识别</td>
+<td align="left">全局安装 <code>npm install -g hexo-cli</code> 并重启终端</td>
+</tr>
+<tr>
+<td align="left">改文章后页面未更新</td>
+<td align="left">重新执行 <code>hexo generate</code> 生成静态文件</td>
+</tr>
+</tbody></table>
+<h2 id="七、心得体会"><a href="#七、心得体会" class="headerlink" title="七、心得体会"></a>七、心得体会</h2><p>本次实验让我理清了 Node.js、npm、Git、Hexo 之间的协作关系，并直观体会到静态站点“提前编译、访问快、免数据库”的优势。这些工具全部开源免费，让我零成本搭建起个人博客，体现了开源社区的共享精神；同时国内 npmmirror 镜像也让我认识到自主可控基础设施的重要性。作为未来的软件工程师，我应积极参与开源社区，为国产开源生态贡献力量。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%8C%E6%8A%A5%E5%91%8A/" data-id="cmrd42typ0003c0n3hxck2lsb" data-title="实验二报告" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%89%E6%8A%A5%E5%91%8A/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          实验三报告
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/07/08/%E5%8E%9F%E7%A5%9E/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">原神</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/07/">July 2026</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AB%E6%8A%A5%E5%91%8A/">实验八报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%B8%83%E6%8A%A5%E5%91%8A/">实验七报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%85%AD%E6%8A%A5%E5%91%8A/">实验六报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E4%BA%94%E6%8A%A5%E5%91%8A/">实验五报告</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/09/%E5%AE%9E%E9%AA%8C%E5%9B%9B%E6%8A%A5%E5%91%8A/">实验四报告</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2026 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
